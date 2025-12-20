@@ -1,0 +1,291 @@
+#include "Interpreter.hpp"
+#include <iostream>
+#include <sstream>
+#include <cmath>
+#include <algorithm>
+
+void Interpreter::run(const std::vector<ASTNodePtr>& nodes) {
+    for (const auto& node : nodes) {
+        if (hasReturned) break;
+        execute(node);
+    }
+}
+
+void Interpreter::execute(const ASTNodePtr& node) {
+    if (!node) return;
+    
+    switch (node->type) {
+        case NodeType::VAR_DECL: {
+            std::string value = evaluate(node->children[0]);
+            vars[node->value] = value;
+            break;
+        }
+        
+        case NodeType::ASSIGNMENT: {
+            std::string value = evaluate(node->children[0]);
+            vars[node->value] = value;
+            break;
+        }
+        
+        case NodeType::PRINT: {
+            for (size_t i = 0; i < node->children.size(); ++i) {
+                if (i > 0) std::cout << " ";
+                std::cout << evaluate(node->children[i]);
+            }
+            std::cout << std::endl;
+            break;
+        }
+        
+        case NodeType::IF: {
+            std::string condValue = evaluate(node->children[0]);
+            if (isTruthy(condValue)) {
+                execute(node->children[1]);
+            } else {
+                // Check for else if and else
+                for (size_t i = 2; i < node->children.size(); ++i) {
+                    auto& child = node->children[i];
+                    if (child->type == NodeType::IF) {
+                        std::string elifCond = evaluate(child->children[0]);
+                        if (isTruthy(elifCond)) {
+                            execute(child->children[1]);
+                            return;
+                        }
+                    } else if (child->type == NodeType::BLOCK) {
+                        // This is the else block
+                        execute(child);
+                        return;
+                    }
+                }
+            }
+            break;
+        }
+        
+        case NodeType::WHILE: {
+            while (isTruthy(evaluate(node->children[0]))) {
+                execute(node->children[1]);
+                if (hasReturned) break;
+            }
+            break;
+        }
+        
+        case NodeType::FOR: {
+            execute(node->children[0]); // init
+            while (isTruthy(evaluate(node->children[1]))) { // condition
+                execute(node->children[3]); // body
+                if (hasReturned) break;
+                evaluate(node->children[2]); // increment (evaluate, not execute)
+            }
+            break;
+        }
+        
+        case NodeType::FUNCTION_DECL: {
+            functions[node->value] = node;
+            break;
+        }
+        
+        case NodeType::RETURN: {
+            if (!node->children.empty()) {
+                returnValue = evaluate(node->children[0]);
+            } else {
+                returnValue = "0";
+            }
+            hasReturned = true;
+            break;
+        }
+        
+        case NodeType::BLOCK: {
+            for (const auto& stmt : node->children) {
+                execute(stmt);
+                if (hasReturned) break;
+            }
+            break;
+        }
+        
+        default:
+            break;
+    }
+}
+
+std::string Interpreter::evaluate(const ASTNodePtr& node) {
+    if (!node) return "0";
+    
+    switch (node->type) {
+        case NodeType::NUMBER:
+            return node->value;
+        
+        case NodeType::STRING:
+            return node->value;
+        
+        case NodeType::BOOLEAN:
+            return node->value; // "s7i7" or "ghalat"
+        
+        case NodeType::IDENTIFIER: {
+            auto it = vars.find(node->value);
+            if (it != vars.end()) {
+                return it->second;
+            }
+            std::cerr << "Error: Undefined variable '" << node->value << "'\n";
+            exit(1);
+        }
+        
+        case NodeType::BINARY_OP: {
+            std::string left = evaluate(node->children[0]);
+            std::string right = evaluate(node->children[1]);
+            std::string op = node->op;
+            
+            if (op == "+") {
+                // Try numeric addition first, if that fails, do string concat
+                try {
+                    double l = std::stod(left);
+                    double r = std::stod(right);
+                    double result = l + r;
+                    if (result == (int)result) {
+                        return std::to_string((int)result);
+                    }
+                    return std::to_string(result);
+                } catch (...) {
+                    // String concatenation
+                    return left + right;
+                }
+            } else if (op == "-") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                double result = l - r;
+                if (result == (int)result) {
+                    return std::to_string((int)result);
+                }
+                return std::to_string(result);
+            } else if (op == "*") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                double result = l * r;
+                if (result == (int)result) {
+                    return std::to_string((int)result);
+                }
+                return std::to_string(result);
+            } else if (op == "/") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                if (r == 0) {
+                    std::cerr << "Error: Division by zero\n";
+                    exit(1);
+                }
+                double result = l / r;
+                if (result == (int)result) {
+                    return std::to_string((int)result);
+                }
+                return std::to_string(result);
+            } else if (op == "==") {
+                return (left == right) ? "s7i7" : "ghalat";
+            } else if (op == "!=") {
+                return (left != right) ? "s7i7" : "ghalat";
+            } else if (op == "<") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                return (l < r) ? "s7i7" : "ghalat";
+            } else if (op == ">") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                return (l > r) ? "s7i7" : "ghalat";
+            } else if (op == "<=") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                return (l <= r) ? "s7i7" : "ghalat";
+            } else if (op == ">=") {
+                double l = std::stod(left);
+                double r = std::stod(right);
+                return (l >= r) ? "s7i7" : "ghalat";
+            } else if (op == "w") {
+                return (isTruthy(left) && isTruthy(right)) ? "s7i7" : "ghalat";
+            } else if (op == "wla") {
+                return (isTruthy(left) || isTruthy(right)) ? "s7i7" : "ghalat";
+            }
+            break;
+        }
+        
+        case NodeType::UNARY_OP: {
+            std::string operand = evaluate(node->children[0]);
+            std::string op = node->op;
+            
+            if (op == "-") {
+                double val = std::stod(operand);
+                double result = -val;
+                if (result == (int)result) {
+                    return std::to_string((int)result);
+                }
+                return std::to_string(result);
+            } else if (op == "post++") {
+                // For now, just increment
+                if (node->children[0]->type == NodeType::IDENTIFIER) {
+                    double val = std::stod(operand);
+                    vars[node->children[0]->value] = std::to_string((int)(val + 1));
+                    if (val == (int)val) {
+                        return std::to_string((int)val);
+                    }
+                    return std::to_string(val);
+                }
+            }
+            break;
+        }
+        
+        case NodeType::CALL: {
+            auto it = functions.find(node->value);
+            if (it != functions.end()) {
+                // Function exists
+                auto funcNode = it->second;
+                
+                // Save current variables
+                auto savedVars = vars;
+                bool savedHasReturned = hasReturned;
+                std::string savedReturnValue = returnValue;
+                
+                hasReturned = false;
+                returnValue = "0";
+                
+                // Bind parameters
+                for (size_t i = 0; i < funcNode->params.size() && i < node->children.size(); ++i) {
+                    vars[funcNode->params[i]] = evaluate(node->children[i]);
+                }
+                
+                // Execute function body
+                execute(funcNode->body);
+                
+                std::string result = returnValue;
+                
+                // Restore variables
+                vars = savedVars;
+                hasReturned = savedHasReturned;
+                returnValue = savedReturnValue;
+                
+                return result;
+            } else {
+                std::cerr << "Error: Undefined function '" << node->value << "'\n";
+                exit(1);
+            }
+        }
+        
+        default:
+            break;
+    }
+    
+    return "0";
+}
+
+bool Interpreter::isTruthy(const std::string& value) {
+    if (value == "ghalat" || value == "0" || value == "" || value == "0.0") {
+        return false;
+    }
+    return true;
+}
+
+std::string Interpreter::toNumber(const std::string& value) {
+    try {
+        return std::to_string(std::stod(value));
+    } catch (...) {
+        return "0";
+    }
+}
+
+std::string Interpreter::toString(const std::string& value) {
+    return value;
+}

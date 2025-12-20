@@ -1,0 +1,46 @@
+kteb("=== Loops Demo ===")
+
+// While loop (ma7ad)
+kteb("While loop - counting to 5:")
+dir counter = 1
+ma7ad (counter <= 5) {
+    kteb("Count:", counter)
+    counter = counter + 1
+}
+
+// While loop with condition
+kteb("Countdown:")
+dir countdown = 5
+ma7ad (countdown > 0) {
+    kteb(countdown)
+    countdown = countdown - 1
+}
+kteb("Blast off!")
+
+// For loop (kol)
+kteb("For loop - numbers 0 to 9:")
+kol (i = 0; i < 10; i++) {
+    kteb("Number:", i)
+}
+
+// Multiplication table
+kteb("Multiplication table for 7:")
+kol (i = 1; i <= 10; i++) {
+    dir result = 7 * i
+    kteb("7 x", i, "=", result)
+}
+
+// Nested loops
+kteb("Pattern printing:")
+kol (i = 1; i <= 5; i++) {
+    kol (j = 1; j <= i; j++) {
+        kteb("*")
+    }
+}
+
+// Sum calculation
+dir sum = 0
+kol (i = 1; i <= 100; i++) {
+    sum = sum + i
+}
+kteb("Sum of 1 to 100:", sum)

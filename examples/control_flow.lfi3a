@@ -1,0 +1,65 @@
+kteb("=== Control Flow Demo ===")
+
+// Basic if statement
+dir score = 85
+
+ila (score >= 90) {
+    kteb("Grade: Excellent!")
+} wila (score >= 80) {
+    kteb("Grade: Very Good!")
+} wila (score >= 70) {
+    kteb("Grade: Good")
+} wila (score >= 60) {
+    kteb("Grade: Pass")
+} wla {
+    kteb("Grade: Fail")
+}
+
+// Age checker
+dir age = 22
+
+ila (age < 13) {
+    kteb("You are a child")
+} wila (age < 18) {
+    kteb("You are a teenager")
+} wila (age < 60) {
+    kteb("You are an adult")
+} wla {
+    kteb("You are a senior")
+}
+
+// Logical operators
+dir temperature = 25
+dir isSunny = s7i7
+
+kteb("Weather check:")
+ila (temperature > 20 w isSunny == s7i7) {
+    kteb("Perfect day for a picnic!")
+} wila (temperature > 20 w isSunny == ghalat) {
+    kteb("Warm but cloudy")
+} wla {
+    kteb("Maybe stay inside today")
+}
+
+// Number comparison
+dir x = 15
+dir y = 20
+
+ila (x > y) {
+    kteb(x, "is greater than", y)
+} wila (x < y) {
+    kteb(x, "is less than", y)
+} wla {
+    kteb(x, "is equal to", y)
+}
+
+// Boolean logic
+dir hasLicense = s7i7
+dir hasInsurance = s7i7
+dir isOver18 = s7i7
+
+ila (hasLicense == s7i7 w hasInsurance == s7i7 w isOver18 == s7i7) {
+    kteb("You can drive!")
+} wla {
+    kteb("You cannot drive yet")
+}

@@ -1,0 +1,48 @@
+kteb("=== Data Types Demo ===")
+
+// Integers
+dir age = 25
+dir year = 2024
+kteb("Integer examples:")
+kteb("Age:", age)
+kteb("Year:", year)
+
+// Floats/Decimals
+dir pi = 3.14159
+dir price = 99.99
+dir temperature = -5.5
+kteb("Float examples:")
+kteb("Pi:", pi)
+kteb("Price:", price)
+kteb("Temperature:", temperature)
+
+// Strings
+dir name = "Oussama"
+dir language = "LFI3A"
+dir message = "Salam"
+kteb("String examples:")
+kteb(name)
+kteb(language)
+kteb(message)
+
+// String concatenation
+dir firstName = "Oussama"
+dir lastName = "Jabrane"
+dir fullName = firstName + " " + lastName
+kteb("Full name:", fullName)
+
+// Booleans
+dir isStudent = s7i7
+dir isWorking = ghalat
+kteb("Boolean examples:")
+kteb("Is student:", isStudent)
+kteb("Is working:", isWorking)
+
+// Mixed operations
+dir quantity = 5
+dir unitPrice = 12.99
+dir total = quantity * unitPrice
+kteb("Shopping calculation:")
+kteb("Quantity:", quantity)
+kteb("Unit price:", unitPrice)
+kteb("Total:", total)

@@ -1,0 +1,6 @@
+dir ism = "Oussama"
+dir age = 25
+
+kteb("Salam", ism, "!")
+kteb("3ndek", age, "years")
+kteb("Welcome to LFI3A programming!")

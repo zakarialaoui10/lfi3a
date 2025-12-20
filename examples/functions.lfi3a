@@ -1,0 +1,83 @@
+kteb("=== LFI3A Functions Demo ===")
+
+// Simple function with no parameters
+dalla sayHello() {
+    kteb("Salam from LFI3A!")
+}
+
+sayHello()
+
+// Function with parameters
+dalla greet(name) {
+    kteb("Salam", name, "!")
+    rje3 "Welcomed " + name
+}
+
+dir result = greet("Oussama")
+kteb(result)
+
+// Function with multiple parameters
+dalla add(a, b) {
+    rje3 a + b
+}
+
+kteb("5 + 3 =", add(5, 3))
+
+// Function with multiple parameters and logic
+dalla max(a, b) {
+    ila (a > b) {
+        rje3 a
+    } wla {
+        rje3 b
+    }
+}
+
+kteb("Max of 10 and 25:", max(10, 25))
+kteb("Max of 100 and 50:", max(100, 50))
+
+// Calculator function
+dalla calculate(x, y, operation) {
+    ila (operation == "+") {
+        rje3 x + y
+    } wila (operation == "-") {
+        rje3 x - y
+    } wila (operation == "*") {
+        rje3 x * y
+    } wila (operation == "/") {
+        rje3 x / y
+    } wla {
+        rje3 0
+    }
+}
+
+kteb("Calculator examples:")
+kteb("5 + 3 =", calculate(5, 3, "+"))
+kteb("10 - 4 =", calculate(10, 4, "-"))
+kteb("6 * 7 =", calculate(6, 7, "*"))
+kteb("20 / 4 =", calculate(20, 4, "/"))
+
+// Check if number is even
+dalla isEven(num) {
+    dir remainder = num - ((num / 2) * 2)
+    ila (remainder == 0) {
+        rje3 s7i7
+    } wla {
+        rje3 ghalat
+    }
+}
+
+kteb("Is 4 even?", isEven(4))
+kteb("Is 7 even?", isEven(7))
+
+// Area calculator functions
+dalla rectangleArea(length, width) {
+    rje3 length * width
+}
+
+dalla circleArea(radius) {
+    dir pi = 3.14159
+    rje3 pi * radius * radius
+}
+
+kteb("Rectangle (5x3) area:", rectangleArea(5, 3))
+kteb("Circle (r=10) area:", circleArea(10))

@@ -1,0 +1,78 @@
+kteb("=== Student Grade Calculator ===")
+
+// Student data
+dir studentName = "Ahmed"
+dir mathScore = 85
+dir scienceScore = 78
+dir englishScore = 92
+
+// Calculate average
+dalla calculateAverage(score1, score2, score3) {
+    dir sum = score1 + score2 + score3
+    rje3 sum / 3
+}
+
+// Determine grade
+dalla getGrade(average) {
+    ila (average >= 90) {
+        rje3 "A"
+    } wila (average >= 80) {
+        rje3 "B"
+    } wila (average >= 70) {
+        rje3 "C"
+    } wila (average >= 60) {
+        rje3 "D"
+    } wla {
+        rje3 "F"
+    }
+}
+
+// Get performance message
+dalla getPerformance(grade) {
+    ila (grade == "A") {
+        rje3 "Excellent work!"
+    } wila (grade == "B") {
+        rje3 "Good job!"
+    } wila (grade == "C") {
+        rje3 "Satisfactory"
+    } wila (grade == "D") {
+        rje3 "Needs improvement"
+    } wla {
+        rje3 "Please study harder"
+    }
+}
+
+// Display student information
+kteb("Student Report Card")
+kteb("==================")
+kteb("Name:", studentName)
+kteb("Math Score:", mathScore)
+kteb("Science Score:", scienceScore)
+kteb("English Score:", englishScore)
+
+// Calculate and display results
+dir average = calculateAverage(mathScore, scienceScore, englishScore)
+dir finalGrade = getGrade(average)
+dir performance = getPerformance(finalGrade)
+
+kteb("Average:", average)
+kteb("Final Grade:", finalGrade)
+kteb("Performance:", performance)
+
+// Check if student passed all subjects
+dir allPassed = s7i7
+ila (mathScore < 60) {
+    allPassed = ghalat
+}
+ila (scienceScore < 60) {
+    allPassed = ghalat
+}
+ila (englishScore < 60) {
+    allPassed = ghalat
+}
+
+ila (allPassed == s7i7) {
+    kteb("Status: PASSED all subjects")
+} wla {
+    kteb("Status: FAILED one or more subjects")
+}
