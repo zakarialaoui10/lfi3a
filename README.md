@@ -12,7 +12,7 @@ LFI3A (pronounced "lfi-3a") is a beginner-friendly programming language that ble
 - [Functions](#-functions)
 - [Project Structure](#️-project-structure)
 - [Examples](#-examples)
-- [Limitations](#limitations)
+- [Limitations](#-limitations)
 - [Why LFI3A?](#-why-lfi3a)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -340,3 +340,4 @@ LFI3A is released as an educational project. See the project repository for spec
 ---
 
 Created with ❤️ by **Oussama Jabrane**. Inspired by Moroccan culture and a desire to make programming more accessible.
+
