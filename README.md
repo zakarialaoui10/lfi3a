@@ -12,7 +12,7 @@ LFI3A (pronounced "lfi-3a") is a beginner-friendly programming language that ble
 - [Functions](#-functions)
 - [Project Structure](#️-project-structure)
 - [Examples](#-examples)
-- [Limitations](#-limitations)
+- [Limitations](#limitations)
 - [Why LFI3A?](#-why-lfi3a)
 - [Contributing](#-contributing)
 - [License](#-license)
@@ -293,6 +293,7 @@ ma7ad (s7i7) {
 | `wla` | OR | `a wla b` |
 
 ## ⚠️ Limitations
+<a id="limitations"></a>
 
 ### Current Version
 
